@@ -1,0 +1,29 @@
+CREATE DATABASE company_db;
+USE company_db;
+
+CREATE TABLE employees (
+    EmpID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50),
+    Age INT,
+    Department VARCHAR(50),
+    Salary DECIMAL(10,2)
+);
+
+INSERT INTO employees (FirstName, LastName, Age, Department, Salary) VALUES
+('John', 'Smith', 30, 'IT', 55000),
+('Emma', 'Johnson', 28, 'HR', 45000),
+('Michael', 'Brown', 35, 'Finance', 60000),
+('Sophia', 'Davis', 26, 'IT', 70000),
+('David', 'Wilson', 40, 'Accounts', 50000);
+
+
+SELECT * FROM employees;
+SELECT FirstName, Age, Department, Salary FROM employees;
+SELECT * FROM employees WHERE Department = 'IT';
+SELECT EmpID, FirstName, LastName, Age FROM employees WHERE Department = 'IT';
+
+UPDATE employees SET Department = 'Accounts' WHERE Department='Finance';
+
+
+DELETE FROM employees WHERE Department='HR';
