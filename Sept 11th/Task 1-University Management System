@@ -1,0 +1,318 @@
+db.students.insertOne({
+  _id: 5,
+  name: "Karan Mehta",
+  age: 21,
+  email: "karan@example.com",
+  city: "Mumbai"
+});
+{
+  acknowledged: true,
+  insertedId: 5
+}
+db.students.find({ city: "Delhi" });
+{
+  _id: 2,
+  name: 'Priya Singh',
+  age: 22,
+  email: 'priya@example.com',
+  city: 'Delhi'
+}
+ 
+db.students.updateOne(
+  { name: "Aman Kumar" },
+  { $set: { email: "aman.kumar@example.com" } }
+);
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+db.students.deleteOne({ name: "Sneha Reddy" });
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+db.students.createIndex({ email: 1 }, { unique: true });
+email_1
+db.courses.createIndex({ department: 1, credits: 1 });
+department_1_credits_1
+db.students.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { email: 1 }, name: 'email_1', unique: true }
+]
+db.courses.getIndexes();
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  {
+    v: 2,
+    key: { department: 1, credits: 1 },
+    name: 'department_1_credits_1'
+  }
+]
+db.courses.find({ department: "CS", credits: { $gte: 3 } });
+{
+  _id: 102,
+  title: 'Data Structures',
+  department: 'CS',
+  credits: 3
+}
+{
+  _id: 101,
+  title: 'Database Systems',
+  department: 'CS',
+  credits: 4
+}
+{
+  _id: 104,
+  title: 'Operating Systems',
+  department: 'CS',
+  credits: 4
+}
+db.courses.find({ title: "Economics 101" });
+{
+  _id: 103,
+  title: 'Economics 101',
+  department: 'Economics',
+  credits: 2
+}
+db.enrollments.aggregate([
+  { $group: { _id: "$course_id", studentCount: { $sum: 1 } } }
+]);
+{
+  _id: 102,
+  studentCount: 1
+}
+{
+  _id: 104,
+  studentCount: 1
+}
+{
+  _id: 103,
+  studentCount: 1
+}
+{
+  _id: 101,
+  studentCount: 2
+}
+db.students.aggregate([
+  { $group: { _id: "$city", avgAge: { $avg: "$age" } } }
+]);
+{
+  _id: 'Hyderabad',
+  avgAge: 20
+}
+{
+  _id: 'Delhi',
+  avgAge: 22
+}
+{
+  _id: 'Bangalore',
+  avgAge: 21
+}
+{
+  _id: 'Mumbai',
+  avgAge: 21
+}
+db.courses.aggregate([
+  { $match: { department: "CS" } },
+  { $sort: { credits: -1 } },
+  { $limit: 1 }
+]);
+{
+  _id: 104,
+  title: 'Operating Systems',
+  department: 'CS',
+  credits: 4
+}
+db.enrollments.aggregate([
+  {
+    $lookup: {
+      from: "students",
+      localField: "student_id",
+      foreignField: "_id",
+      as: "studentInfo"
+    }
+  }
+]);
+{
+  _id: ObjectId('68c29094205f8571911231ec'),
+  student_id: 1,
+  course_id: 101,
+  grade: 'A',
+  studentInfo: [
+    {
+      _id: 1,
+      name: 'Rahul Sharma',
+      age: 21,
+      email: 'rahul@example.com',
+      city: 'Bangalore'
+    }
+  ]
+}
+{
+  _id: ObjectId('68c29094205f8571911231ed'),
+  student_id: 1,
+  course_id: 103,
+  grade: 'B',
+  studentInfo: [
+    {
+      _id: 1,
+      name: 'Rahul Sharma',
+      age: 21,
+      email: 'rahul@example.com',
+      city: 'Bangalore'
+    }
+  ]
+}
+{
+  _id: ObjectId('68c29094205f8571911231ee'),
+  student_id: 2,
+  course_id: 101,
+  grade: 'A',
+  studentInfo: [
+    {
+      _id: 2,
+      name: 'Priya Singh',
+      age: 22,
+      email: 'priya@example.com',
+      city: 'Delhi'
+    }
+  ]
+}
+{
+  _id: ObjectId('68c29094205f8571911231ef'),
+  student_id: 3,
+  course_id: 102,
+  grade: 'C',
+  studentInfo: [
+    {
+      _id: 3,
+      name: 'Aman Kumar',
+      age: 20,
+      email: 'aman.kumar@example.com',
+      city: 'Hyderabad'
+    }
+  ]
+}
+{
+  _id: ObjectId('68c29094205f8571911231f0'),
+  student_id: 4,
+  course_id: 104,
+  grade: 'B',
+  studentInfo: []
+}
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "enrollments",
+      localField: "_id",
+      foreignField: "student_id",
+      as: "enrolledCourses"
+    }
+  },
+  {
+    $lookup: {
+      from: "courses",
+      localField: "enrolledCourses.course_id",
+      foreignField: "_id",
+      as: "coursesInfo"
+    }
+  }
+]);
+{
+  _id: 1,
+  name: 'Rahul Sharma',
+  age: 21,
+  email: 'rahul@example.com',
+  city: 'Bangalore',
+  enrolledCourses: [
+    {
+      _id: ObjectId('68c29094205f8571911231ec'),
+      student_id: 1,
+      course_id: 101,
+      grade: 'A'
+    },
+    {
+      _id: ObjectId('68c29094205f8571911231ed'),
+      student_id: 1,
+      course_id: 103,
+      grade: 'B'
+    }
+  ],
+  coursesInfo: [
+    {
+      _id: 101,
+      title: 'Database Systems',
+      department: 'CS',
+      credits: 4
+    },
+    {
+      _id: 103,
+      title: 'Economics 101',
+      department: 'Economics',
+      credits: 2
+    }
+  ]
+}
+{
+  _id: 2,
+  name: 'Priya Singh',
+  age: 22,
+  email: 'priya@example.com',
+  city: 'Delhi',
+  enrolledCourses: [
+    {
+      _id: ObjectId('68c29094205f8571911231ee'),
+      student_id: 2,
+      course_id: 101,
+      grade: 'A'
+    }
+  ],
+  coursesInfo: [
+    {
+      _id: 101,
+      title: 'Database Systems',
+      department: 'CS',
+      credits: 4
+    }
+  ]
+}
+{
+  _id: 3,
+  name: 'Aman Kumar',
+  age: 20,
+  email: 'aman.kumar@example.com',
+  city: 'Hyderabad',
+  enrolledCourses: [
+    {
+      _id: ObjectId('68c29094205f8571911231ef'),
+      student_id: 3,
+      course_id: 102,
+      grade: 'C'
+    }
+  ],
+  coursesInfo: [
+    {
+      _id: 102,
+      title: 'Data Structures',
+      department: 'CS',
+      credits: 3
+    }
+  ]
+}
+{
+  _id: 5,
+  name: 'Karan Mehta',
+  age: 21,
+  email: 'karan@example.com',
+  city: 'Mumbai',
+  enrolledCourses: [],
+  coursesInfo: []
+}
+db.enrollments.aggregate([
+  { $match: { grade: "A" } },
+  { $count: "studentsWithA" }
+]);
