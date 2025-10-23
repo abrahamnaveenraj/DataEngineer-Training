@@ -1,0 +1,11 @@
+order_id,supplier_id,product_name,quantity,expected_date,delivery_date,status
+1001,SUP001,Laptop,10,2025-10-01,2025-10-03,Delivered
+1002,SUP002,Mouse,50,2025-10-02,2025-10-02,Delivered
+1003,SUP001,Keyboard,20,2025-10-05,2025-10-07,Delivered
+1004,SUP003,Monitor,15,2025-10-06,2025-10-05,Delivered
+1005,SUP002,USB Cable,100,2025-10-03,2025-10-08,Delivered
+1006,SUP004,SSD,25,2025-10-07,2025-10-06,Delivered
+1007,SUP001,Headset,30,2025-10-05,2025-10-09,Delivered
+1008,SUP005,Printer,5,2025-10-01,2025-10-10,Delivered
+1009,SUP003,Router,12,2025-10-04,2025-10-04,Delivered
+1010,SUP004,Camera,8,2025-10-02,2025-10-05,Delivered
