@@ -1,0 +1,6 @@
+supplier_id,total_orders,delayed_orders
+SUP001,3,3
+SUP002,2,1
+SUP004,2,1
+SUP005,1,1
+SUP003,2,
