@@ -1,0 +1,40 @@
+trigger:
+  branches:
+    include:
+      - main
+
+schedules:
+  - cron: "0 0 * * 0"  # Every Sunday midnight
+    displayName: Weekly Energy Report
+
+stages:
+  - stage: DataFetch
+    jobs:
+      - job: FetchRawData
+        steps:
+          - script: python fetch_data.py
+            displayName: Fetch new energy data
+
+  - stage: DataClean
+    dependsOn: DataFetch
+    jobs:
+      - job: CleanData
+        steps:
+          - script: python clean_data.py
+            displayName: Clean and validate data
+
+  - stage: Reporting
+    dependsOn: DataClean
+    jobs:
+      - job: GenerateReport
+        steps:
+          - script: python generate_report.py
+            displayName: Generate energy summary report
+
+  - stage: Alerts
+    dependsOn: Reporting
+    jobs:
+      - job: CheckThreshold
+        steps:
+          - script: python threshold_alert.py
+            displayName: Check threshold and trigger alert
